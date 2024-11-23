@@ -15,6 +15,25 @@ Also, since I use this extension myself, if it ever stops working, I'll be the f
 - **Translation**: Translates extracted text using LibreTranslate.
 - **Overlay**: Displays translations directly on images for seamless reading.
 
+## Language Compatibility
+
+The extension supports OCR and translation for the following languages:
+
+| Language             | OCR Support | Translation Support |
+|----------------------|-------------|---------------------|
+| English (`eng`)      | ✅          | ✅                  |
+| Spanish (`spa`)      | ✅          | ✅                  |
+| French (`fra`)       | ✅          | ✅                  |
+| German (`deu`)       | ✅          | ❌                  |
+| Italian (`ita`)      | ✅          | ❌                  |
+| Portuguese (`por`)   | ✅          | ❌                  |
+| Chinese (`chi_sim`)  | ✅          | ⏳                  |
+| Japanese (`jpn`)     | ✅          | ⏳                  |
+| Korean (`kor`)       | ✅          | ⏳                  |
+| Russian (`rus`)      | ✅          | ❌                  |
+
+*Note: You can add or remove languages by modifying the `languages` variable in `scripts/contentScript.js` and including the appropriate `.traineddata` files in the `tessdata` directory.*
+
 ---
 
 ## Installation
