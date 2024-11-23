@@ -6,7 +6,7 @@ So, here's the story behind why I started making this extension. I'm really into
 
 I wanted it to be free because I know there's another extension out there that does something similar, but it's paid. And let's be real—we're not all made of money over here. So yeah, this project was born out of frustration and the desire to help fellow manga fans enjoy their favorite series without the wait or the cost.*
 
-Just a heads-up: I'm a student developer, so this is not perfect. Even though I'm doing my best with this extension, you might notice things that could be better. But hey, I'll get there eventually, OK?
+**Just a heads-up**: I'm a student developer, so this is not perfect. Even though I'm doing my best with this extension, you might notice things that could be better. But hey, I'll get there eventually, OK?
 
 Also, since I use this extension myself, if it ever stops working, I'll be the first to know—so no need to reach out to me about that. And I want to say I'm always thankful for anyone who uses my extension and to any contributors who are willing to help out! 
 
