@@ -32,7 +32,7 @@ The extension supports OCR and translation for the following languages:
 | Korean (`kor`)       | ✅          | ⏳                  |
 | Russian (`rus`)      | ✅          | ❌                  |
 
-*Note: You can add or remove languages by modifying the `languages` variable in `scripts/contentScript.js` and including the appropriate `.traineddata` files in the `tessdata` directory.*
+*Note: languages compatibility will evolve with time just as site compatibility will appear later on.*
 
 ---
 
