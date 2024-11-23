@@ -1,18 +1,96 @@
 # Image Translator Chrome Extension
 
-A Chrome extension that collects images from the current page, performs OCR to extract text, translates the text into English, and overlays the translations on the images.
+An easy-to-use Chrome extension that extracts text from images on webpages, translates the text, and overlays the translations onto the images in real-time.
 
 ## Features
+- **OCR**: Uses Tesseract.js to extract text from images.
+- **Translation**: Translates extracted text using LibreTranslate.
+- **Overlay**: Displays translations directly on images for seamless reading.
 
-- Collects all images from the active tab.
-- Performs OCR using Tesseract.js.
-- Translates extracted text using LibreTranslate.
-- Overlays translated text onto images.
-- Supports multiple languages.
+---
 
 ## Installation
 
-1. Clone or download this repository.
+### Option 1: Install from Source
+1. **Download and Extract**:  
+   Download the ZIP file containing the extension source code and extract it to a directory on your computer.
 
+2. **Open Google Chrome**:  
+   Navigate to `chrome://extensions/` in the address bar.
+
+3. **Enable Developer Mode**:  
+   Toggle the **Developer mode** switch in the top-right corner.
+
+4. **Load the Extension**:  
+   - Click on **Load unpacked**.  
+   - Select the directory where you extracted the extension files.
+
+---
+
+## Usage
+1. **Navigate to a Webpage with Images**:  
+   Visit any website containing images with text, such as articles, comics, or scanned documents.
+
+2. **Activate the Extension**:  
+   Click on the **Image Translator Extension** icon in the Chrome toolbar.
+
+3. **Wait for Processing**:  
+   The extension will:  
+   - Automatically collect images.  
+   - Perform OCR to extract text.  
+   - Translate the extracted text.  
+   - Overlay the translations onto the images.
+
+4. **View Results**:  
+   Translated images will be displayed in the extension popup.
+
+---
+
+## Prerequisites
+- **Google Chrome**: Version 88 or higher is recommended.
+- **Internet Connection**: Required for fetching translations via LibreTranslate.
+
+---
+
+## Development Setup
+1. **Install Node.js and npm** (if not already installed):  
+   Download and install from [Node.js](https://nodejs.org/).
+
+2. **Install Dependencies**:  
+   - Navigate to the project directory.  
+   - Run `npm install` if necessary (though the extension includes all required dependencies).
+
+3. **Modify Source Code**:  
+   Make changes to the extension files as needed.
+
+4. **Reload the Extension**:  
+   After making changes, reload the extension on the `chrome://extensions/` page.
+
+---
+
+## Contributing
+Contributions are welcome! Follow these steps to contribute:
+
+1. **Fork the Repository**:  
+   Click the **Fork** button at the top-right of the repository page.
+
+2. **Create a New Branch**:  
    ```bash
-   git clone https://github.com/N3uralCreattivity/image-translator-extension.git
+   git checkout -b feature/YourFeatureName
+3. **Commit Your Changes**:
+   ```bash
+    git commit -am 'Add new feature'
+4. **Push to the Branch**:
+   ```bash
+   git push origin feature/YourFeatureName
+5. **Open a Pull Request**:
+   - Navigate to your forked repository on GitHub.
+   - Click on Pull Request.
+   
+## License
+This project is licensed under the **MIT License**. See the LICENSE file for details.
+
+## Acknowledgments
+   - Tesseract.js: For providing OCR functionality.
+   - LibreTranslate: For the free translation API.
+   - OpenAI's ChatGPT: For assisting in project development.

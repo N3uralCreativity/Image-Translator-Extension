@@ -1,5 +1,126 @@
 // popup.js
-/*
+const worker = Tesseract.createWorker({
+  workerPath: chrome.runtime.getURL("tesseract/worker.min.js"),
+  corePath: chrome.runtime.getURL("tesseract/tesseract-core.wasm.js"),
+  logger: (m) => console.log(m),
+});
+
+let currentTabUrl = "";
+
+// Resolve relative URLs to absolute URLs
+function resolveUrl(url) {
+  try {
+    return new URL(url, currentTabUrl).href;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Process an image with OCR and overlay results
+async function processImage(src) {
+  const absoluteSrc = resolveUrl(src);
+  if (!absoluteSrc) return null;
+
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "Anonymous"; // Avoid CORS issues
+    img.src = absoluteSrc;
+
+    img.onload = async () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+
+      try {
+        // Load and initialize the Tesseract worker
+        await worker.load();
+        await worker.loadLanguage("eng");
+        await worker.initialize("eng");
+
+        // Perform OCRx
+        const { data } = await worker.recognize(canvas);
+        console.log("OCR Text:", data.text);
+
+        // Optional: You can overlay text on the image here if needed
+
+        // Convert the canvas back to an image URL
+        const processedImageSrc = canvas.toDataURL();
+        resolve(processedImageSrc);
+      } catch (error) {
+        console.error("Error processing image:", error);
+        resolve(null);
+      }
+    };
+
+    img.onerror = () => {
+      console.error("Error loading image:", absoluteSrc);
+      resolve(null);
+    };
+  });
+}
+
+// Display images in the popup
+async function displayImages(imageSources) {
+  const imageContainer = document.getElementById("imageContainer");
+  imageContainer.innerHTML = ""; // Clear previous content
+
+  // Show loading message
+  const loadingMessage = document.createElement("p");
+  loadingMessage.textContent = "Processing images, please wait...";
+  imageContainer.appendChild(loadingMessage);
+
+  for (const src of imageSources) {
+    const processedSrc = await processImage(src);
+    if (processedSrc) {
+      const imgElement = document.createElement("img");
+      imgElement.src = processedSrc;
+      imageContainer.appendChild(imgElement);
+    }
+  }
+
+  // Remove the loading message
+  imageContainer.removeChild(loadingMessage);
+}
+
+// Inject content script to collect images
+function injectContentScript() {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs.length === 0) return;
+    const activeTab = tabs[0];
+    currentTabUrl = activeTab.url;
+
+    chrome.scripting.executeScript(
+      {
+        target: { tabId: activeTab.id },
+        files: ["contentScript.js"],
+      },
+      () => {
+        if (chrome.runtime.lastError) {
+          console.error(
+            "Error injecting content script:",
+            chrome.runtime.lastError,
+          );
+        }
+      },
+    );
+  });
+}
+
+// Listen for messages from content script
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.imageSources) {
+    displayImages(message.imageSources);
+  }
+});
+
+// Initialize extension
+document.addEventListener("DOMContentLoaded", () => {
+  injectContentScript();
+});
+
+/* .Old
 // Define the languages you want Tesseract.js to recognize
 const languages = 'eng+spa+fra'; // Add or remove language codes as needed
 
@@ -194,9 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
   injectContentScript();
 });
 */
-// popup.js
 
-/*
+/* .Old
 // Function to translate text using LibreTranslate
 async function translateText(text, targetLang) {
     try {
@@ -266,122 +386,3 @@ async function translateText(text, targetLang) {
   });
   
 */
-
-const worker = Tesseract.createWorker({
-    workerPath: chrome.runtime.getURL("tesseract/worker.min.js"),
-    corePath: chrome.runtime.getURL("tesseract/tesseract-core.wasm.js"),
-    logger: m => console.log(m),
-  });  
-  
-  let currentTabUrl = "";
-  
-  // Resolve relative URLs to absolute URLs
-  function resolveUrl(url) {
-    try {
-      return new URL(url, currentTabUrl).href;
-    } catch (e) {
-      return null;
-    }
-  }
-  
-  // Process an image with OCR and overlay results
-  async function processImage(src) {
-    const absoluteSrc = resolveUrl(src);
-    if (!absoluteSrc) return null;
-  
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "Anonymous"; // Avoid CORS issues
-      img.src = absoluteSrc;
-  
-      img.onload = async () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-  
-        try {
-          // Load and initialize the Tesseract worker
-          await worker.load();
-          await worker.loadLanguage("eng");
-          await worker.initialize("eng");
-  
-          // Perform OCRx
-          const { data } = await worker.recognize(canvas);
-          console.log("OCR Text:", data.text);
-  
-          // Optional: You can overlay text on the image here if needed
-  
-          // Convert the canvas back to an image URL
-          const processedImageSrc = canvas.toDataURL();
-          resolve(processedImageSrc);
-        } catch (error) {
-          console.error("Error processing image:", error);
-          resolve(null);
-        }
-      };
-  
-      img.onerror = () => {
-        console.error("Error loading image:", absoluteSrc);
-        resolve(null);
-      };
-    });
-  }
-  
-  // Display images in the popup
-  async function displayImages(imageSources) {
-    const imageContainer = document.getElementById("imageContainer");
-    imageContainer.innerHTML = ""; // Clear previous content
-  
-    // Show loading message
-    const loadingMessage = document.createElement("p");
-    loadingMessage.textContent = "Processing images, please wait...";
-    imageContainer.appendChild(loadingMessage);
-  
-    for (const src of imageSources) {
-      const processedSrc = await processImage(src);
-      if (processedSrc) {
-        const imgElement = document.createElement("img");
-        imgElement.src = processedSrc;
-        imageContainer.appendChild(imgElement);
-      }
-    }
-  
-    // Remove the loading message
-    imageContainer.removeChild(loadingMessage);
-  }
-  
-  // Inject content script to collect images
-  function injectContentScript() {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs.length === 0) return;
-      const activeTab = tabs[0];
-      currentTabUrl = activeTab.url;
-  
-      chrome.scripting.executeScript(
-        {
-          target: { tabId: activeTab.id },
-          files: ["contentScript.js"]
-        },
-        () => {
-          if (chrome.runtime.lastError) {
-            console.error("Error injecting content script:", chrome.runtime.lastError);
-          }
-        }
-      );
-    });
-  }
-  
-  // Listen for messages from content script
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message.imageSources) {
-      displayImages(message.imageSources);
-    }
-  });
-  
-  // Initialize extension
-  document.addEventListener("DOMContentLoaded", () => {
-    injectContentScript();
-  });
-  
