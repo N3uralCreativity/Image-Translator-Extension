@@ -2,20 +2,20 @@
 (function () {
   const imageSources = new Set();
 
-  // Add an image source to the set
+  // Add image sources to the set
   function addImageSource(src) {
     if (src && !src.startsWith("data:")) {
       imageSources.add(src);
     }
   }
 
-  // Collect images from <img> tags
-  document.querySelectorAll("img").forEach((img) => {
-    addImageSource(img.src);
+  // Collect images from the page
+  function collectImages() {
+    document.querySelectorAll("img").forEach((img) => {
+      addImageSource(img.src);
 
-    // Handle common lazy-loading attributes
-    ["data-src", "data-lazy", "data-original", "data-srcset", "srcset"].forEach(
-      (attr) => {
+      // Handle lazy-loaded attributes
+      ["data-src", "data-lazy", "data-original", "data-srcset", "srcset"].forEach((attr) => {
         const attrValue = img.getAttribute(attr);
         if (attrValue) {
           if (attr === "data-srcset" || attr === "srcset") {
@@ -26,42 +26,31 @@
             addImageSource(attrValue);
           }
         }
-      },
-    );
-  });
-
-  // Collect images from <source> tags in <picture> elements
-  document.querySelectorAll("picture source").forEach((source) => {
-    ["src", "data-src", "srcset", "data-srcset"].forEach((attr) => {
-      const attrValue = source.getAttribute(attr);
-      if (attrValue) {
-        attrValue.split(",").forEach((src) => {
-          addImageSource(src.trim().split(" ")[0]);
-        });
-      }
+      });
     });
-  });
 
-  // Collect poster images from <video> tags
-  document.querySelectorAll("video").forEach((video) => {
-    addImageSource(video.poster);
-  });
+    // Collect sources from <picture> elements
+    document.querySelectorAll("picture source").forEach((source) => {
+      ["src", "data-src"].forEach((attr) => {
+        addImageSource(source.getAttribute(attr));
+      });
+    });
 
-  // Collect background images from inline styles
-  document.querySelectorAll('*[style*="background"]').forEach((element) => {
-    const style = window.getComputedStyle(element);
-    const bgImage = style.getPropertyValue("background-image");
-    if (bgImage && bgImage !== "none") {
-      const matches = bgImage.match(/url\(["']?([^"')]+)["']?\)/);
-      if (matches && matches[1]) {
-        addImageSource(matches[1]);
-      }
-    }
-  });
+    // Debugging output
+    console.log("Collected image sources:", Array.from(imageSources));
+  }
 
-  // Send image sources to popup
-  chrome.runtime.sendMessage({ imageSources: Array.from(imageSources) });
+  // Observe changes in the DOM for dynamically added images
+  const observer = new MutationObserver(collectImages);
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // Initial collection
+  collectImages();
+
+  // Send image sources to the background script or popup
+  chrome.runtime.sendMessage({ type: "images", images: Array.from(imageSources) });
 })();
+
 
 /*
 (function() {
