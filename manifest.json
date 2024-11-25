@@ -11,6 +11,7 @@
   "content_security_policy": {
     "extension_pages": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src https://libretranslate.de/;"
   },
+  
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
