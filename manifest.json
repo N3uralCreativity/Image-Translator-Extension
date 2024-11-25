@@ -3,13 +3,8 @@
   "name": "Image Translator Extension",
   "version": "1.0",
   "description": "Collects images from the current page, performs OCR, translates text, and overlays translations on the images.",
-  "permissions": [
-    "activeTab",
-    "scripting"
-  ],
-  "host_permissions": [
-    "https://libretranslate.de/*"
-  ],
+  "permissions": ["activeTab","scripting"],
+  "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "popup.html"
   },
@@ -18,12 +13,8 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "scripts/contentScript.js"
-      ],
+      "matches": ["<all_urls>"],
+      "js": ["scripts/contentScript.js"],
       "run_at": "document_idle"
     }
   ],
