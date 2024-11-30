@@ -3,12 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Fetcher</title>
+  <title>Image to Text Extractor</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Images from Page</h1>
-  <div id="image-container"></div>
-  <script src="popup.js"></script>
+  <div class="container">
+    <h1>Image to Text Extractor</h1>
+    <p>Select an image file, and this tool will extract any text it contains.</p>
+    <input type="file" id="image-input" accept="image/*">
+    <button id="process-btn">Extract Text</button>
+    <div id="result">
+      <h2>Extracted Text:</h2>
+      <p id="output-text"></p>
+    </div>
+    <canvas id="canvas" style="display: none;"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js/dist/tesseract.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
