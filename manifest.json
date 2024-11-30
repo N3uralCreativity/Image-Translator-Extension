@@ -1,34 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "Image Translator Extension",
+  "name": "Image Fetcher",
   "version": "1.0",
-  "description": "Collects images from the current page, performs OCR, translates text, and overlays translations on the images.",
-  "permissions": ["activeTab","scripting"],
+  "description": "Fetches images from the current webpage and displays them in the extension popup.",
+  "permissions": ["activeTab", "scripting"],
   "host_permissions": ["<all_urls>"],
   "action": {
-    "default_popup": "popup.html"
-  },
-  "content_security_policy": {
-    "extension_pages": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src https://libretranslate.de/;"
-  },
-  
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["scripts/contentScript.js"],
-      "run_at": "document_idle"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
     }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "tesseract/tesseract.min.js",
-        "tesseract/tesseract-core.wasm.js",
-        "tesseract/worker.min.js"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
-    }
-  ]
+  }
 }
