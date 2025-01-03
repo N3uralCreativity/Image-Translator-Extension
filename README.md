@@ -121,3 +121,5 @@ This project is licensed under the **MIT License**. See the LICENSE file for det
    - Tesseract.js: For providing OCR functionality.
    - LibreTranslate: For the free translation API.
    - OpenAI's ChatGPT: For assisting in project development.
+## Crédits(fr):
+- bah à moi leo.P 🤧
